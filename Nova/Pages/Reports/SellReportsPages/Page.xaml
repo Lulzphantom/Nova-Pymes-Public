@@ -1,0 +1,124 @@
+﻿<Page x:Class="Nova.Pages.Reports.SellReportsPages.BoxMovements"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Nova.Pages.Reports.SellReportsPages"
+      xmlns:fa="http://schemas.fontawesome.io/icons/"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800" x:Name="SellPage" Loaded="SellPage_Loaded"
+      Title="SellPage">
+
+    <Grid>
+        <DockPanel x:Name="ReportDock" LastChildFill="True" Margin="0,0,0,40">
+            <!-- Search Header -->
+            <Grid x:Name="FilterGrid" VerticalAlignment="Top" DockPanel.Dock="Top" Height="70" Background="White" >
+
+                <!-- Filter Buttons -->
+                <Button x:Name="FilterBT" Click="FilterBT_Click" Height="30" FontWeight="Normal" Background="{StaticResource ReportsHeader}" Style="{StaticResource StyledButton}" Width="100" HorizontalAlignment="Left" Margin="30,0,0,0">
+                    <Grid>
+                        <fa:ImageAwesome Icon="Search" Margin="0,0,0,0" Foreground="White" HorizontalAlignment="Left" Height="10"/>
+                        <Label Content="Filtros " Margin="15,0,0,0" FontSize="12" Foreground="White" VerticalContentAlignment="Center"/>
+                    </Grid>
+                </Button>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,30,0">
+                    <Button x:Name="ExportBT" Click="ExportBT_Click" Uid="2" Height="30" FontWeight="Normal" Background="{StaticResource ReportsHeader}" Style="{StaticResource StyledButton}" Width="75" Margin="10,0,0,0">
+                        <Grid>
+                            <fa:ImageAwesome Icon="Upload" Margin="5,0,0,0" Foreground="White" HorizontalAlignment="Left" Height="10"/>
+                            <Label Content="Exportar " Margin="15,0,0,0" FontSize="12" Foreground="White" VerticalContentAlignment="Center"/>
+                        </Grid>
+                    </Button>
+                    <Button x:Name="RefreshPage" Click="RefreshPage_Click" ToolTip="Recargar página" Background="{StaticResource ReportsHeader}" Style="{StaticResource RoundedButton}" Height="30" Width="30" Margin="30,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Center" >
+                        <fa:ImageAwesome Icon="Refresh" Margin="7" Foreground="White"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+            <!-- Information panel -->
+            <Grid Height="40" VerticalAlignment="Top" DockPanel.Dock="Top" Background="{StaticResource PanelLightBackground}">
+                <TextBlock x:Name="FilterLB" Text="Filtrando: " TextDecorations="Underline" FontWeight="SemiBold" Foreground="{StaticResource GrayFont}" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,20,0"/>
+                <TextBlock x:Name="TotalValueLB" Visibility="Collapsed" Text="" FontWeight="SemiBold" Foreground="{StaticResource GrayFont}" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,20,0"/>
+            </Grid>
+
+            <!-- Datagrid -->
+            <DataGrid FontSize="12"  x:Name="ContentDataGrid" Background="White" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" Style="{StaticResource DataGridStyled}">
+                <DataGrid.Columns>
+                    <DataGridTemplateColumn Header="ACCIÓN" MinWidth="150" Visibility="Collapsed" x:Name="BoxAction">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,30,0">
+                                    <Button x:Name="Print" Click="Print_Click" Tag="{Binding id}" Style="{StaticResource IconButton}" Height="25" HorizontalAlignment="Left">
+                                        <StackPanel Orientation="Horizontal" >
+                                            <fa:ImageAwesome Icon="Print" Foreground="{StaticResource ReportsHeader}" Margin="5,5,0,5"/>
+                                            <Label Content="Imprimir " FontSize="12" Foreground="{StaticResource ReportsHeader}" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+        <Grid x:Name="PaginationGrid" Height="40" VerticalAlignment="Bottom" Background="{StaticResource PanelLightBackground}">
+            <!-- Pagination and count info -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <Label Content="Mostrando registros:" FontSize="12" VerticalAlignment="Center" Margin="20,0,0,0" Foreground="{StaticResource GrayFont}" FontWeight="SemiBold"/>
+                <Label x:Name="FPage" Content="0" FontSize="12" VerticalAlignment="Center" Foreground="{StaticResource ReportsHeader}" FontWeight="Bold"/>
+                <Label Content="-" FontSize="12" VerticalAlignment="Center" Foreground="{StaticResource GrayFont}" FontWeight="SemiBold"/>
+                <Label x:Name="LPage" Content="0" FontSize="12" VerticalAlignment="Center" Foreground="{StaticResource ReportsHeader}" FontWeight="Bold"/>
+                <Label Content="de" FontSize="12" VerticalAlignment="Center" Foreground="{StaticResource GrayFont}" FontWeight="SemiBold"/>
+                <Label x:Name="TotalProducts" Content="0" FontSize="12" VerticalAlignment="Center" Foreground="{StaticResource ReportsHeader}" FontWeight="Bold"/>
+            </StackPanel>
+            <!-- tickets pagination-->
+            <StackPanel x:Name="PaginationStack" SnapsToDevicePixels="True" Margin="0,7,30,7" Orientation="Horizontal" HorizontalAlignment="Right"/>
+        </Grid>
+
+        <!-- Filter popup -->
+        <Popup x:Name="FilterPopUp" PlacementTarget="{x:Reference Name=SellPage}" Width="500">
+
+            <Border Margin="15"  CornerRadius="10" Background="White" BorderBrush="Gainsboro" BorderThickness="1">
+                <Border.Effect>
+                    <DropShadowEffect ShadowDepth="0" BlurRadius="10" Opacity="0.5"/>
+                </Border.Effect>
+                <Grid x:Name="ContentCanvas">
+                    <!-- PopupHeader -->
+                    <Label FontSize="14" Content="Filtros" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10" Foreground="{StaticResource ReportsHeader}" FontWeight="SemiBold"/>
+                    <Button x:Name="ExitPopUp" Click="ExitPopUp_Click" Background="{StaticResource ReportsHeader}" Style="{StaticResource RoundedButton}" Height="20" Width="20" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="15">
+                        <fa:ImageAwesome Icon="Close" Margin="5" Foreground="White"/>
+                    </Button>
+                    <StackPanel  Orientation="Vertical" Margin="0,50,0,70">
+                        <!-- Branch filter -->
+                        <Grid Margin="0,10,0,0" >
+                            <Label Content="Sucursal:" Margin="60,0,0,0" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource GrayFont}"/>
+                            <ComboBox x:Name="BranchCB" SelectionChanged="BranchCB_SelectionChanged" DisplayMemberPath="name" SelectedIndex="0" BorderBrush="{StaticResource ReportsHeader}" Style="{StaticResource ComboBoxStyled}" Height="30" Margin="60,0,60,0" HorizontalAlignment="Right" Width="200"  VerticalAlignment="Top"/>
+                        </Grid>
+                        <!-- Box filter -->
+                        <Grid Margin="0,10,0,0" >
+                            <Label Content="Punto de venta:" Margin="60,0,0,0" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource GrayFont}"/>
+                            <ComboBox x:Name="BoxCB" DisplayMemberPath="BoxName"  BorderBrush="{StaticResource ReportsHeader}" Style="{StaticResource ComboBoxStyled}" Height="30" Margin="60,0,60,0" HorizontalAlignment="Right" Width="200" VerticalAlignment="Top"/>
+                        </Grid>
+                        <!-- Date from filter -->
+                        <Grid Margin="0,10,0,0" >
+                            <Label Content="Fecha desde:" Margin="60,0,0,0" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource GrayFont}"/>
+                            <DatePicker x:Name="FromDateDT" SelectedDateFormat="Long" HorizontalAlignment="Right" Width="200" Margin="0,0,60,0" VerticalContentAlignment="Center"/>
+                        </Grid>
+                        <!-- Date to filter -->
+                        <Grid Margin="0,10,0,0" >
+                            <Label Content="Fecha hasta:" Margin="60,0,0,0" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource GrayFont}" Grid.ColumnSpan="2"/>
+                            <DatePicker x:Name="ToDateDT" SelectedDateFormat="Long" HorizontalAlignment="Right" Width="200" Margin="0,0,60,0" VerticalContentAlignment="Center" Grid.ColumnSpan="2"/>
+                        </Grid>
+
+                    </StackPanel>
+                    <!-- Save option -->
+                    <Button x:Name="ApplyFilterBT" Click="ApplyFilterBT_Click" Height="30"  VerticalAlignment="Bottom" FontWeight="Normal" Content="Aplicar y generar informe" Background="{StaticResource ReportsHeader}" Style="{StaticResource StyledButton}" Width="150" Margin="0,20,0,20" />
+                </Grid>
+            </Border>
+        </Popup>
+
+
+        <Grid x:Name="LoadingGrid" Margin="0,110,0,40" Background="White" Visibility="Collapsed">
+            <fa:ImageAwesome x:Name="Spinner" Icon="Spinner" Spin="True" Foreground="{StaticResource ReportsHeader}" SpinDuration="2" Width="80"/>
+            <Label x:Name="LoadingLabel" Content="Cargando datos" FontWeight="Normal" Margin="0,120,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource ReportsHeader}"/>
+        </Grid>
+    </Grid>
+</Page>

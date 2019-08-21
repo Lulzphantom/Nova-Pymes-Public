@@ -1,0 +1,170 @@
+﻿<Page x:Class="Nova.Pages.Configuration.UserRolPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:fa="http://schemas.fontawesome.io/icons/"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Nova.Pages.Configuration"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="UserRolPage" Loaded="Page_Loaded">
+    <!-- Principal container -->
+    <Grid Background="{StaticResource PanelBackground}">
+        <TabControl BorderBrush="{x:Null}" Background="White" Margin="20,20,20,0" SelectionChanged="TabControl_SelectionChanged">
+            <TabItem Background="{StaticResource ConfigHeader}"  Height="50" Style="{StaticResource StyledTabItem}">
+                <!-- Header -->
+                <TabItem.Header>
+                    <TextBlock Text="Rol de usuarios" FontWeight="Medium"/>
+                </TabItem.Header>
+
+                <!-- Rol container -->
+                <Grid>                    
+                    <!-- Rol Add button -->
+                    <Button x:Name="NewRolBT" Style="{StaticResource IconButton}" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,20,0,0" Click="NewRolBT_Click" >
+                        <StackPanel Orientation="Horizontal" >
+                            <fa:ImageAwesome Icon="CalendarPlusOutline" Foreground="{StaticResource ConfigHeader}" Margin="5,5,0,5"/>
+                            <Label Content="Nuevo rol " FontWeight="SemiBold" Foreground="{StaticResource GrayFont}" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Save button -->
+                    <Button x:Name="SaveBT" IsEnabled="False"  Style="{StaticResource IconButton}" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="210,20,0,0" Click="SaveRolBT_Click" >
+                        <StackPanel Orientation="Horizontal" >
+                            <fa:ImageAwesome Icon="Save" Foreground="{StaticResource ConfigHeader}" Margin="5,5,0,5"/>
+                            <Label Content="Guardar información " FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource GrayFont}" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Refresh button -->
+                    <Button x:Name="RefreshBT" ToolTip="Recargar pagína" Background="{StaticResource ConfigHeader}" Style="{StaticResource RoundedButton}" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,20,0" Click="RefreshBT_Click">
+                        <fa:ImageAwesome Icon="Refresh" Margin="7" Foreground="White"/>
+                    </Button>
+                    
+                    <!-- Form and list content -->
+                    <DockPanel Margin="-2,70,-2,0" LastChildFill="True">
+                        
+                        <!-- Rol create/modify form -->
+                        <Grid x:Name="FormGrid" DockPanel.Dock="Top" MaxHeight="100" Height="0" Opacity="0" Margin="0,0,0,10" Background="{StaticResource PanelLightBackground}">
+                            <!-- Shadow border-->
+                            <Border VerticalAlignment="Top" Height="10" Margin="0,-10,0,0" Background="White">
+                                <Border.Effect>
+                                    <DropShadowEffect Opacity="0.23" Direction="270" ShadowDepth="3" BlurRadius="2"/>
+                                </Border.Effect>
+                            </Border>
+                            
+                            <!-- Input controls here -->
+                            <StackPanel Orientation="Horizontal" >
+                            <!-- Rol name -->
+                            <Grid>
+                            <Label Content="Nombre:" FontWeight="Normal" Opacity=".5" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,15,0,0"/>
+                                    <TextBox x:Name="RolNameTX" MaxLength="30"  FontWeight="Normal" Width="250" VerticalAlignment="Top" Style="{StaticResource StyledTextBox}" Margin="24,45,0,0" Height="25" HorizontalAlignment="Left" KeyDown="MoveFocus"/>
+                            </Grid>
+                            <!-- Rol description -->
+                            <Grid>
+                                    <Label Content="Descripción:" Opacity=".5"   FontWeight="Normal" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,15,0,0"/>
+                                    <TextBox x:Name="RolDescriptTX"  FontWeight="Normal" MaxLength="100" Width="250" VerticalAlignment="Top" Style="{StaticResource StyledTextBox}" Margin="24,45,0,0" Height="25" HorizontalAlignment="Left" KeyDown="MoveFocus"/>
+                            </Grid>  
+
+                                <!-- permissions button -->
+                                <Button x:Name="EditPermBT" IsEnabled="False" Style="{StaticResource IconButton}" Height="30" HorizontalAlignment="Left" Margin="10,15,0,0" Click="EditPermBT_Click" >
+                                    <StackPanel Orientation="Horizontal" >
+                                        <fa:ImageAwesome Icon="Users" Foreground="{StaticResource ConfigHeader}" Margin="5,5,0,5"/>
+                                        <Label Content="Editar permisos "  FontWeight="Normal" Foreground="{StaticResource GrayFont}" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                                    </StackPanel>
+                                </Button>
+                            </StackPanel>                              
+                        </Grid>            
+                        
+                        
+                        <!-- Rol list -->
+                        <DataGrid x:Name="RolGrid" Background="White" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" Style="{StaticResource DataGridStyled}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="NOMBRE" MinWidth="150" MaxWidth="300" Binding="{Binding rolname}" />
+                                <DataGridTextColumn Header="DESCRIPCIÓN" MinWidth="150" MaxWidth="300" Binding="{Binding roldescription}" />
+                                <DataGridTextColumn Header="USUARIOS" MinWidth="110" Binding="{Binding usercount}" CellStyle="{StaticResource DataGridCellStyledRight}"  HeaderStyle="{StaticResource DataGridHeaderStyledRight}" />
+                                <DataGridTextColumn Width="*"/>
+                                <DataGridTemplateColumn Header="ACCIÓN" MinWidth="300">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Button x:Name="EditRol" Tag="{Binding rolid}" Style="{StaticResource IconButton}" Height="25" HorizontalAlignment="Left" Click="EditRol_Click">
+                                                    <StackPanel Orientation="Horizontal" >
+                                                        <fa:ImageAwesome Icon="Edit" Foreground="{StaticResource ConfigHeader}" Margin="5,5,0,5"/>
+                                                        <Label Content="Editar " FontSize="12" Foreground="{StaticResource ConfigHeader}" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                                                    </StackPanel>
+                                                </Button>
+                                                <Button x:Name="DeleteRol" Tag="{Binding rolid}" Style="{StaticResource IconButton}" Height="25" HorizontalAlignment="Left" Margin="15,0,0,0" Click="DeleteRol_Click" >
+                                                    <StackPanel Orientation="Horizontal" >
+                                                        <fa:ImageAwesome Icon="Trash" Foreground="{StaticResource ConfigHeader}" Margin="5,5,0,5"/>
+                                                        <Label Content="Eliminar " FontSize="12" Foreground="{StaticResource ConfigHeader}" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                                                    </StackPanel>
+                                                </Button>
+                                            </StackPanel>                                            
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>                            
+                        </DataGrid>                       
+                    </DockPanel>
+                    <!-- Loading grid TOP -->
+                    <Grid x:Name="LoadingRolGrid" Background="White" Visibility="Collapsed">
+                        <fa:ImageAwesome x:Name="RolSpinner" Icon="Spinner" Spin="True" Foreground="{StaticResource ConfigHeader}" SpinDuration="2" Width="80"/>
+                        <Label Content="Cargando datos" Margin="0,120,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource ConfigHeader}"/>
+                    </Grid>
+                </Grid>                
+                
+            </TabItem>
+            <TabItem x:Name="PermissionsTab" Background="{StaticResource ConfigHeader}" Height="50" Style="{StaticResource StyledTabItem}">
+                <!-- Header -->
+                <TabItem.Header>
+                    <TextBlock Text="Permisos de usuario" FontWeight="Medium"/>
+                </TabItem.Header>
+                <Grid>
+                    <!-- Permission container -->
+                    
+                    <!-- Rol list combo box -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
+                        <Label Content="Editando permisos del rol:" FontSize="17" FontWeight="Light" HorizontalAlignment="Center" Foreground="{StaticResource GrayFont}" VerticalContentAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0"/>
+                        <Label x:Name="LabelTitle" Content="" FontSize="17" FontWeight="SemiBold" HorizontalAlignment="Center" Foreground="{StaticResource ConfigHeader}" VerticalContentAlignment="Center" VerticalAlignment="Top" Margin="0,20,0,0"/>
+                    </StackPanel>
+                    
+                    
+                    <!-- Refresh button -->
+                    <Button  x:Name="PermissionsSaveBT" Background="{StaticResource ConfigHeader}" Style="{StaticResource RoundedButton}" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,20,0" Click="PermissionsSaveBT_Click">
+                        <fa:ImageAwesome Icon="Save" Margin="7" Foreground="White"/>
+                    </Button>
+
+                    <!-- Predefined role buttons -->
+                    <StackPanel Margin="20,70,0,0" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Left" >
+                        <Button Click="Button_Click" Uid="1"  Height="30" FontWeight="Normal" Content="Marcar todo" Background="{StaticResource ConfigHeader}" Style="{StaticResource StyledButton}" Width="150" />
+                        <Button Click="Button_Click" Uid="2"  Margin="20,0,20,0" Height="30" FontWeight="Normal" Content="Desmarcar todo" Background="{StaticResource ConfigHeader}" Style="{StaticResource StyledButton}" Width="150" />                        
+                    </StackPanel>
+                    
+                    
+                    <!-- Form and list content -->
+                    <DockPanel Margin="-2,110,-2,0" LastChildFill="True">
+                        <!-- Rol list -->
+                        <DataGrid Background="White" x:Name="PermissionsGrid" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" Style="{StaticResource DataGridStyled}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="NOMBRE" MaxWidth="450" Binding="{Binding name}" />
+                                <DataGridTemplateColumn Header="PERMISOS">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Tag="{Binding id}" Orientation="Horizontal" VerticalAlignment="Center">
+                                                <CheckBox x:Name="Consult" Style="{StaticResource CheckBoxStyled}" BorderBrush="{StaticResource ConfigHeader}" DataContext="{Binding permissions}" IsChecked="{Binding consult, Mode=TwoWay}" Content="Consultar " Height="25" HorizontalAlignment="Left"/>
+                                                <CheckBox x:Name="Create" Style="{StaticResource CheckBoxStyled}" BorderBrush="{StaticResource ConfigHeader}" DataContext="{Binding permissions}" IsChecked="{Binding create, Mode=TwoWay}" Content="Crear y modificar " Height="25" HorizontalAlignment="Left" Margin="15,0,0,0"/>
+                                                <CheckBox x:Name="Delete" Style="{StaticResource CheckBoxStyled}" BorderBrush="{StaticResource ConfigHeader}" DataContext="{Binding permissions}" IsChecked="{Binding delete, Mode=TwoWay}" Content="Eliminar " Height="25" HorizontalAlignment="Left" Margin="15,0,0,0"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+
+
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Page>

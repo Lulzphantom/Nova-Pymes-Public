@@ -1,0 +1,69 @@
+﻿<Page x:Class="Nova.Pages.Login.LoginConfig"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:fa="http://schemas.fontawesome.io/icons/"
+      mc:Ignorable="d" 
+      d:DesignHeight="600" d:DesignWidth="360"
+      Title="LoginConfig" Loaded="Page_Loaded" UseLayoutRounding="True">
+    <ScrollViewer>
+
+        <!--Content stack -->
+        <StackPanel>
+
+            <!--Label subtitle CONECTION-->
+            <Label Content="Conexión" Opacity=".5" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,10,0,0" FontWeight="SemiBold"/>
+            <Border BorderThickness="0,1,0,0" Width="190" BorderBrush="{StaticResource BorderBackground}" HorizontalAlignment="Left" Margin="20,0,0,0"/>
+
+            <!-- DB Route-->
+            <Label Content="Ruta de API:" Opacity=".5" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,10,0,0"/>
+            <TextBox x:Name="APIIPTextbox" Style="{StaticResource StyledTextBox}" Margin="25,0,40,0" Height="25" TabIndex="1"/>
+
+            <!-- File route-->
+            <Grid Margin="25,0,40,0"/>
+
+            <!-- Check config BT-->
+            <Button x:Name="CheckConfig" IsEnabled="False" Content="Comprobar conexión" Foreground="White" Height="25" Width="200" Margin="0,20,0,0" Style="{StaticResource LoginButtonStyle}" Click="CheckConfig_Click" TabIndex="2"/>
+
+            <!--Label subtitle LOCAL-->
+            <Label Content="Lugar de trabajo" Opacity=".5" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,20,0,0" FontWeight="SemiBold"/>
+            <Border BorderThickness="0,1,0,0" Width="190" BorderBrush="{StaticResource BorderBackground}" HorizontalAlignment="Left" Margin="20,0,0,0"/>
+
+            <!-- Work place -->
+            <Label Content="Sede:" Opacity=".5" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,5,0,0"/>
+            <ComboBox x:Name="BranchCB" SelectionChanged="BranchCB_SelectionChanged" DisplayMemberPath="BranchName" Margin="25,0,40,0" Height="25" TabIndex="3"/>
+
+            <!-- Work point -->
+            <Label Content="Punto de trabajo:" Opacity=".5" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,5,0,0"/>
+            <ComboBox x:Name="WorkPointCB" DisplayMemberPath="BoxName" Margin="25,0,40,0" Height="25" TabIndex="4"/>
+
+            <!--Label subtitle UPDATES-->
+            <Label Content="Actualizaciónes" Opacity=".5" FontSize="16" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,20,0,0" FontWeight="SemiBold"/>
+            <Border BorderThickness="0,1,0,0" Width="190" BorderBrush="{StaticResource BorderBackground}" HorizontalAlignment="Left" Margin="20,0,0,0" />
+
+            <!-- Local updates check -->
+            <CheckBox x:Name="UpdatesCB" Margin="25,20,40,0" IsChecked="True" TabIndex="5">
+                <TextBlock TextWrapping="Wrap" Opacity=".5">
+                    Descargar automaticamente actualizaciónes del 
+                     servidor de red local.
+                </TextBlock>
+            </CheckBox>
+
+            <!-- Cloud updates check -->
+            <CheckBox x:Name="CloudCB" Margin="25,20,40,0" IsChecked="True" TabIndex="6">
+                <TextBlock  TextWrapping="Wrap" Opacity=".5">
+                     Permitir conexión al servidor en la nube para  
+                     recibir actualizaciónes de ultima instancia
+                    y telemetria.
+                </TextBlock>
+            </CheckBox>
+
+            <!-- Save BT -->
+            <Button x:Name="SaveBT" Style="{StaticResource RoundedButton}" Background="{StaticResource BorderBackground}" Margin="0,20,0,40" Width="100" Height="100" Click="SaveBT_Click">
+                <fa:ImageAwesome Icon="Save" Foreground="{StaticResource LoginNotificationColor}" Margin="20"/>
+            </Button>
+
+        </StackPanel>
+    </ScrollViewer>
+</Page>

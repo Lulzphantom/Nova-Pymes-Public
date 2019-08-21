@@ -1,0 +1,31 @@
+﻿<Page x:Class="Nova.Pages.Reports.SellReports"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Nova.Pages.Reports"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800" x:Name="Page" Loaded="Page_Loaded"
+      Title="SellReports">
+    <Grid x:Name="BackgroundGrid" Background="{StaticResource PanelBackground}">
+        <TabControl SelectionChanged="InventoryTab_SelectionChanged" x:Name="InventoryTab" BorderBrush="{x:Null}" Background="White" Margin="20,20,20,0">
+            <!-- Box movements-->
+            <TabItem x:Name="BoxTab" Background="{StaticResource ReportsHeader}"  Height="50" Style="{StaticResource StyledTabItem}">
+                <!-- Header -->
+                <TabItem.Header>
+                    <TextBlock Text="Movimientos de caja" FontWeight="Medium"/>
+                </TabItem.Header>
+                <Frame x:Name="BoxReportsFrame" NavigationUIVisibility="Hidden" Margin="-2,0,-2,-2"/>
+            </TabItem>
+            <!-- Sells -->
+            <TabItem x:Name="SellTab" Background="{StaticResource ReportsHeader}"  Height="50" Style="{StaticResource StyledTabItem}">
+                <!-- Header -->
+                <TabItem.Header>
+                    <TextBlock Text="Informe de venta diaria" FontWeight="Medium"/>
+                </TabItem.Header>
+                <Frame x:Name="SellReportsFrame" NavigationUIVisibility="Hidden"  Margin="-2,0,-2,-2"/>
+            </TabItem>            
+        </TabControl>
+
+    </Grid>
+</Page>

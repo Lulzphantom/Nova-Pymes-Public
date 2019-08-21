@@ -1,0 +1,174 @@
+﻿<Page x:Class="Nova.Pages.Products.InventoryPages.InventoryReportPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Nova.Pages.Products.InventoryPages"
+      xmlns:fa="http://schemas.fontawesome.io/icons/"
+      xmlns:currency="clr-namespace:CurrencyTextBoxControl;assembly=CurrencyTextBoxControl"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="InventoryInPage" Loaded="Page_Loaded" x:Name="InventoryPage">
+    <Page.InputBindings>
+        <KeyBinding Gesture="Control+H"
+                Command="{Binding HCommand}"/>
+    </Page.InputBindings>
+    <Grid>
+        <DockPanel x:Name="InventoryDock" LastChildFill="True" Margin="0,0,0,40">
+            <!-- Search Header -->
+            <Grid VerticalAlignment="Top" DockPanel.Dock="Top" x:Name="FilterGrid" Height="100" Opacity="1" Background="White" >
+
+                <Border Height="30" Width="40" HorizontalAlignment="Left" Margin="60,0,0,0" CornerRadius="2" Background="{StaticResource InventoryHeader}" >
+                    <fa:ImageAwesome Icon="Search" Margin="8" Foreground="White"/>
+                </Border>
+                <!-- Filter textbox -->
+                <TextBox x:Name="FilterTX"  Tag="Buscar producto por código o nombre" KeyDown="FilterTX_KeyDown" FontWeight="Normal" VerticalAlignment="Center" Text="" Margin="98,0,260,0" Padding="5,0,0,0"  Style="{StaticResource StyledTextBox}" Height="30"/>
+
+                <!-- Filter Buttons -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,30,0">
+                    <Button Click="Button_Click" Uid="2" Height="30" FontWeight="Normal" Content="Buscar" Background="{StaticResource InventoryHeader}" Style="{StaticResource StyledButton}" Width="70" Margin="10,0,0,0"  />
+                    <Button x:Name="ExportBT" Uid="2" Height="30" IsEnabled="False" FontWeight="Normal" Background="{StaticResource InventoryHeader}" Style="{StaticResource StyledButton}" Width="75" Margin="10,0,0,0">
+                        <Grid>
+                            <fa:ImageAwesome Icon="Upload" Margin="5,0,0,0" Foreground="White" HorizontalAlignment="Left" Height="10"/>
+                            <Label Content="Exportar " Margin="15,0,0,0" FontSize="12" Foreground="White" VerticalContentAlignment="Center"/>
+                        </Grid>
+                    </Button>
+                    <Button Click="RefreshProducts_Click" x:Name="RefreshProducts" ToolTip="Recargar página" Background="{StaticResource InventoryHeader}" Style="{StaticResource RoundedButton}" Height="30" Width="30" Margin="30,0,0,0" HorizontalAlignment="Right" VerticalAlignment="Center" >
+                        <fa:ImageAwesome Icon="Refresh" Margin="7" Foreground="White"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <!-- Products list -->
+            <DataGrid FontSize="12" x:Name="ProductsGrid" Background="White" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" Style="{StaticResource DataGridStyled}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="CÓDIGO" MaxWidth="300" MinWidth="150" Binding="{Binding code}" CellStyle="{StaticResource DataGridCellStyledRight}"  HeaderStyle="{StaticResource DataGridHeaderStyledRight}"  />
+                    <DataGridTextColumn Header="NOMBRE" MinWidth="300" Binding="{Binding name}" />
+                    <DataGridTextColumn Width="*" />
+                    <DataGridTemplateColumn Header="ACCIÓN" MinWidth="150">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,30,0">
+                                    <Button x:Name="Modify" Tag="{Binding id}" Style="{StaticResource IconButton}" Height="25" HorizontalAlignment="Left" Click="Modify_Click">
+                                        <StackPanel Orientation="Horizontal" >
+                                            <fa:ImageAwesome Icon="Edit" Foreground="{StaticResource InventoryHeader}" Margin="5,5,0,5"/>
+                                            <Label Content="Ajustar " FontSize="12" Foreground="{StaticResource InventoryHeader}" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                                        </StackPanel>
+                                    </Button>
+                                    <Button x:Name="Transfer" Click="Transfer_Click" Tag="{Binding id}" Style="{StaticResource IconButton}" Height="25" HorizontalAlignment="Left" Margin="15,0,0,0">
+                                        <StackPanel Orientation="Horizontal" >
+                                            <fa:ImageAwesome Icon="Exchange" Foreground="{StaticResource InventoryHeader}" Margin="5,5,0,5"/>
+                                            <Label Content="Trasladar " FontSize="12" Foreground="{StaticResource InventoryHeader}" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </DockPanel>
+        <Grid x:Name="PaginationGrid" Height="40" VerticalAlignment="Bottom" Background="{StaticResource PanelLightBackground}">
+            <!-- Pagination and count info -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <Label Content="Mostrando registros:" FontSize="12" VerticalAlignment="Center" Margin="20,0,0,0" Foreground="{StaticResource GrayFont}" FontWeight="SemiBold"/>
+                <Label x:Name="FPage" Content="0" FontSize="12" VerticalAlignment="Center" Foreground="{StaticResource InventoryHeader}" FontWeight="Bold"/>
+                <Label Content="-" FontSize="12" VerticalAlignment="Center" Foreground="{StaticResource GrayFont}" FontWeight="SemiBold"/>
+                <Label x:Name="LPage" Content="0" FontSize="12" VerticalAlignment="Center" Foreground="{StaticResource InventoryHeader}" FontWeight="Bold"/>
+                <Label Content="de" FontSize="12" VerticalAlignment="Center" Foreground="{StaticResource GrayFont}" FontWeight="SemiBold"/>
+                <Label x:Name="TotalProducts" Content="0" FontSize="12" VerticalAlignment="Center" Foreground="{StaticResource InventoryHeader}" FontWeight="Bold"/>
+            </StackPanel>
+            <!-- Product pagination-->
+            <StackPanel x:Name="PaginationStack" SnapsToDevicePixels="True" Margin="0,7,30,7" Orientation="Horizontal" HorizontalAlignment="Right"/>
+        </Grid>
+
+
+        <Grid x:Name="LoadingGrid" Margin="-2,100,-2,40" Background="White" Visibility="Collapsed">
+            <fa:ImageAwesome x:Name="Spinner" Icon="Spinner" Spin="True" Foreground="{StaticResource InventoryHeader}" SpinDuration="2" Width="80"/>
+            <Label Content="Cargando datos" FontWeight="Normal" Margin="0,120,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource InventoryHeader}"/>
+        </Grid>
+
+        <!-- Ajustment PopUP -->
+        <Popup x:Name="InventoryInPopUp" PlacementTarget="{x:Reference Name=InventoryPage}" Width="500">
+
+            <Border Margin="15"  CornerRadius="10" Background="White" BorderBrush="Gainsboro" BorderThickness="1">
+                <Border.Effect>
+                    <DropShadowEffect ShadowDepth="0" BlurRadius="10" Opacity="0.5"/>
+                </Border.Effect>
+                <Grid x:Name="ContentCanvas">
+
+                    <!-- PopupHeader -->
+                    <Label FontSize="14" Content="Ajuste de inventario" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10" Foreground="{StaticResource InventoryHeader}" FontWeight="SemiBold"/>
+                    <Label x:Name="PopUpProductName" FontSize="12" Content="Nombre de producto" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0" />
+                    <Button Click="Button_Click_1" ToolTip="Cerrar" Background="{StaticResource InventoryHeader}" Style="{StaticResource RoundedButton}" Height="20" Width="20" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="15">
+                        <fa:ImageAwesome Icon="Close" Margin="5" Foreground="White"/>
+                    </Button>
+                    <Label x:Name="ErrorMessage" Visibility="Collapsed" FontSize="12" Content="Message" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Gray" FontWeight="Light"/>
+                    <StackPanel x:Name="PriceStack" Orientation="Vertical" Margin="0,70,0,70">
+                        <!-- Product count -->
+                        <Grid Margin="0,0,0,0" >
+                            <Label Content="Sucursal a ajustar:" Margin="0,0,280,0" HorizontalAlignment="Right" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource GrayFont}"/>
+                            <ComboBox x:Name="BranchCB" SelectedIndex="0" KeyDown="MoveFocus" DisplayMemberPath="name"  BorderBrush="{StaticResource InventoryHeader}" Style="{StaticResource ComboBoxStyled}" Height="30" Width="200" Margin="0,0,60,0" HorizontalAlignment="Right" VerticalAlignment="Top" SelectionChanged="BranchCB_SelectionChanged"/>
+                        </Grid>
+                        <Grid Margin="0,10,0,0" >
+                            <Label Content="Cantidad actual:" Margin="0,0,280,0" HorizontalAlignment="Right" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource GrayFont}"/>
+                            <TextBox HorizontalContentAlignment="Right" x:Name="ActualCountTX" IsEnabled="False" Style="{StaticResource StyledTextBox}" Height="30" Width="200" Margin="0,0,60,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                        </Grid>
+                        <Grid Margin="0,10,0,0" >
+                            <Label Content="Nueva cantidad:" Margin="0,0,280,0" HorizontalAlignment="Right" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource GrayFont}"/>
+                            <TextBox GotKeyboardFocus="NewCountTX_GotKeyboardFocus" HorizontalContentAlignment="Right" x:Name="NewCountTX" KeyDown="MoveFocus" TextChanged="CommentTX_TextChanged" PreviewTextInput="TX_PreviewTextInput" Style="{StaticResource StyledTextBox}" Width="200" Margin="0,0,60,0" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid Margin="0,10,0,0" >
+                            <Label Content="Observaciónes:" Margin="0,0,280,0" HorizontalAlignment="Right" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource GrayFont}"/>
+                            <TextBox MaxLength="100" x:Name="CommentTX" KeyDown="MoveFocus" TextChanged="CommentTX_TextChanged" Style="{StaticResource StyledTextBox}" Height="30" Width="200" Margin="0,0,60,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                        </Grid>
+                    </StackPanel>
+                    <!-- Save option -->
+                    <Button IsEnabled="False" Uid="2" Height="30" x:Name="InventoryInBT" VerticalAlignment="Bottom" FontWeight="Normal" Content="Ajustar" Background="{StaticResource InventoryHeader}" Style="{StaticResource StyledButton}" Width="70" Margin="0,20,0,20" Click="InventoryInBT_Click" />
+                </Grid>
+            </Border>
+        </Popup>
+
+        <!-- Transfer PopUP -->
+        <Popup x:Name="TransferPopUp" PlacementTarget="{x:Reference Name=InventoryPage}" Width="500">
+
+            <Border Margin="15"  CornerRadius="10" Background="White" BorderBrush="Gainsboro" BorderThickness="1">
+                <Border.Effect>
+                    <DropShadowEffect ShadowDepth="0" BlurRadius="10" Opacity="0.5"/>
+                </Border.Effect>
+                <Grid x:Name="ContentCanvasTransfer">
+
+                    <!-- PopupHeader -->
+                    <Label FontSize="14" Content="Traslado de inventario" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10" Foreground="{StaticResource InventoryHeader}" FontWeight="SemiBold"/>
+                    <Label x:Name="PopUpProductNameTransfer" FontSize="12" Content="Nombre de producto" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0" />
+                    <Button ToolTip="Cerrar" Click="Button_Click_2" Background="{StaticResource InventoryHeader}" Style="{StaticResource RoundedButton}" Height="20" Width="20" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="15">
+                        <fa:ImageAwesome Icon="Close" Margin="5" Foreground="White"/>
+                    </Button>
+                    <Label x:Name="ErrorMessageTransfer" Visibility="Collapsed" FontSize="12" Content="Message" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Gray" FontWeight="Light"/>
+                    <StackPanel x:Name="TransferStack" Orientation="Vertical" Margin="0,70,0,70">
+                        <!-- Product count -->
+                        <Grid Margin="0,0,0,0" >
+                            <Label Content="Sucursal de origen:" Margin="0,0,280,0" HorizontalAlignment="Right" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource GrayFont}"/>
+                            <ComboBox x:Name="FromBranchCB" SelectedIndex="0" KeyDown="MoveFocus" DisplayMemberPath="name"  BorderBrush="{StaticResource InventoryHeader}" Style="{StaticResource ComboBoxStyled}" Height="30" Width="200" Margin="0,0,60,0" HorizontalAlignment="Right" VerticalAlignment="Top" SelectionChanged="TransferBranchCB_SelectionChanged"/>
+                        </Grid>
+                        <Grid Margin="0,10,0,0" >
+                            <Label Content="Sucursal de destino:" Margin="0,0,280,0" HorizontalAlignment="Right" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource GrayFont}"/>
+                            <ComboBox x:Name="ToBranchCB" SelectedIndex="1" KeyDown="MoveFocus" DisplayMemberPath="name"  BorderBrush="{StaticResource InventoryHeader}" Style="{StaticResource ComboBoxStyled}" Height="30" Width="200" Margin="0,0,60,0" HorizontalAlignment="Right" VerticalAlignment="Top" SelectionChanged="TransferBranchCB_SelectionChanged"/>
+                        </Grid>
+                        <Grid Margin="0,10,0,0" >
+                            <Label Content="Cantidad a trasladar:" Margin="0,0,280,0" HorizontalAlignment="Right" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource GrayFont}"/>
+                            <TextBox TextChanged="TransferCountTX_TextChanged" x:Name="TransferCountTX" GotKeyboardFocus="NewCountTX_GotKeyboardFocus" Text="0" HorizontalContentAlignment="Right" KeyDown="MoveFocus" PreviewTextInput="TX_PreviewTextInput" Style="{StaticResource StyledTextBox}" Width="200" Margin="0,0,60,0" HorizontalAlignment="Right"/>
+                        </Grid>
+                        <Grid Margin="0,10,0,0" >
+                            <Label Content="Observaciónes:" Margin="0,0,280,0" HorizontalAlignment="Right" FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource GrayFont}"/>
+                            <TextBox TextChanged="TransferCountTX_TextChanged" x:Name="TransferCommentTX" MaxLength="100" KeyDown="MoveFocus" Style="{StaticResource StyledTextBox}" Height="30" Width="200" Margin="0,0,60,0" HorizontalAlignment="Right" VerticalAlignment="Top"/>
+                        </Grid>
+                    </StackPanel>
+                    <!-- Save option -->
+                    <Button IsEnabled="False" Uid="2" Height="30" x:Name="TransferBT" VerticalAlignment="Bottom" FontWeight="Normal" Content="Realizar traslado" Background="{StaticResource InventoryHeader}" Style="{StaticResource StyledButton}" Width="110" Margin="0,20,0,20" Click="TransferBT_Click" />
+                </Grid>
+            </Border>
+        </Popup>
+    </Grid>
+</Page>

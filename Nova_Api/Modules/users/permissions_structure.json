@@ -1,0 +1,191 @@
+[
+    {
+        "id": 1,
+        "name": "(Menu) Resumen",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    },
+    {
+        "id": 2,
+        "name": "(Menu) Punto de venta",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    },
+    {
+        "id": 3,
+        "name": "(Menu) Clientes",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    },
+    {
+        "id": 4,
+        "name": "(Menu) Inventario",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    },
+    {
+        "id": 5,
+        "name": "(Menu) Gastos",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    },
+    {
+        "id": 6,
+        "name": "(Menu) Informes",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    },  
+    {
+        "id": 10,
+        "name": "(Menu) Configuración",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    },
+    {
+        "id": 7,
+        "name": "Facturación POS",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    },   
+    {
+        "id": 8,
+        "name": "Devoluciones y cancelaciones",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    }, 
+    {
+        "id": 9,
+        "name": "registro y credito de clientes",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    },  
+    {
+        "id": 11,
+        "name": "Registro de proveedores",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    },    
+    {
+        "id": 12,
+        "name": "Productos y categorias",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    },
+    {
+        "id": 13,
+        "name": "Reporte de inventario",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    },
+    {
+        "id": 14,
+        "name": "Ingreso de inventario",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    },
+    {
+        "id": 15,
+        "name": "Ajuste y traslado de inventario",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    }, 
+    {
+        "id": 16,
+        "name": "Ingreso y registro de gastos",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    }, 
+    {
+        "id": 17,
+        "name": "Generar informes",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    }, 
+    {
+        "id": 20,
+        "name": "Empresa y sucursales",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    },
+    {
+        "id": 21,
+        "name": "Rol de usuario",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    },    
+    {
+        "id": 22,
+        "name": "Permisos de usuario",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    },    
+    {
+        "id": 23,
+        "name": "Cuentas de usuario",
+        "permissions": {
+            "create": 1,
+            "delete": 1,
+            "consult": 1
+        }
+    }
+]

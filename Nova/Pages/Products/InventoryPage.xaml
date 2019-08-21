@@ -1,0 +1,49 @@
+﻿<Page x:Class="Nova.Pages.Products.InventoryPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Nova.Pages.Products"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800" x:Name="invPage"
+      Title="InventoryPage">
+
+    <Grid x:Name="BackgroundGrid" Background="{StaticResource PanelBackground}">
+        <TabControl x:Name="InventoryTab" BorderBrush="{x:Null}" Background="White" Margin="20,20,20,0">
+          <!-- Inventory add-->
+            <TabItem Background="{StaticResource InventoryHeader}"  Height="50" Style="{StaticResource StyledTabItem}">
+                <!-- Header -->
+                <TabItem.Header>
+                    <TextBlock Text="Ingreso de inventario" FontWeight="Medium"/>
+                </TabItem.Header>
+                <Frame NavigationUIVisibility="Hidden" Source="/Nova;component/Pages/Products/InventoryPages/InventoryInPage.xaml" Margin="-2,0,-2,-2"/>
+            </TabItem>
+            <!-- Inventory operations -->
+            <TabItem Background="{StaticResource InventoryHeader}"  Height="50" Style="{StaticResource StyledTabItem}">
+                <!-- Header -->
+                <TabItem.Header>
+                    <TextBlock Text="Reporte de inventario" FontWeight="Medium"/>
+                </TabItem.Header>
+                <Frame x:Name="InventoryInFrame" NavigationUIVisibility="Hidden" Source="/Nova;component/Pages/Products/InventoryPages/InventoryReportPage.xaml" Margin="-2,0,-2,-2"/>
+            </TabItem>
+            <!-- Inventory low products-->
+            <TabItem Background="{StaticResource InventoryHeader}"  Height="50" Style="{StaticResource StyledTabItem}">
+                <!-- Header -->
+                <TabItem.Header>
+                    <TextBlock Text="Productos bajos" FontWeight="Medium"/>
+                </TabItem.Header>
+                <Frame x:Name="InventoryLowPFrame" NavigationUIVisibility="Hidden" Source="/Nova;component/Pages/Products/InventoryPages/InventoryLowPage.xaml" Margin="-2,0,-2,-2"/>
+            </TabItem>
+            
+            <!-- Inventory moviments-->
+            <TabItem Background="{StaticResource InventoryHeader}"  Height="50" Style="{StaticResource StyledTabItem}">
+                <!-- Header -->
+                <TabItem.Header>
+                    <TextBlock Text="Reporte movimientos" FontWeight="Medium"/>
+                </TabItem.Header>
+                <Frame x:Name="InventoryMovimentsFrame" NavigationUIVisibility="Hidden" Source="/Nova;component/Pages/Products/InventoryPages/InventoryMovimentsPage.xaml" Margin="-2,0,-2,-2"/>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Page>

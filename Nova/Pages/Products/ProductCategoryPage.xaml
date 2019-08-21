@@ -1,0 +1,469 @@
+﻿<Page x:Class="Nova.Pages.Products.ProductCategoryPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:Nova.Pages.Products"
+      xmlns:fa="http://schemas.fontawesome.io/icons/"
+      xmlns:currency="clr-namespace:CurrencyTextBoxControl;assembly=CurrencyTextBoxControl"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800" Loaded="Page_Loaded"
+      Title="ProductCategoryPage">
+    <Page.InputBindings>
+        <KeyBinding Gesture="Control+H"
+                Command="{Binding HCommand}"/>
+    </Page.InputBindings>
+    <!-- Principal container -->
+    <Grid x:Name="BackgroundGrid" Background="{StaticResource PanelBackground}">
+        <Label x:Name="HLabel" Content="H" FontWeight="Bold" FontSize="20" HorizontalAlignment="Right" VerticalAlignment="Top" Foreground="Yellow" Visibility="Collapsed" Margin="20"/>
+        <TabControl x:Name="ProductTab" BorderBrush="{x:Null}" Background="White" Margin="20,20,20,0">
+            <TabItem Background="{StaticResource InventoryHeader}"  Height="50" Style="{StaticResource StyledTabItem}">
+              <!-- Header -->
+                <TabItem.Header>
+                    <TextBlock Text="Productos y servicios" FontWeight="Medium"/>
+                </TabItem.Header>
+                
+                <!-- Rol container -->
+                <Grid>
+                    <!-- Branch Add button -->
+                    <Button x:Name="NewProductBT" Click="NewProductBT_Click" Style="{StaticResource IconButton}" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,20,0,0" >
+                        <StackPanel Orientation="Horizontal" >
+                            <fa:ImageAwesome Icon="Dropbox" Foreground="{StaticResource InventoryHeader}" Margin="5,5,0,5"/>
+                            <Label Content="Nuevo producto " FontSize="14" FontWeight="Medium" Foreground="{StaticResource GrayFont}" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Save button -->
+                    <Button x:Name="SaveProductBT" IsEnabled="False"  Style="{StaticResource IconButton}" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="210,20,0,0" Click="SaveProductBT_Click" >
+                        <StackPanel Orientation="Horizontal" >
+                            <fa:ImageAwesome Icon="Save" Foreground="{StaticResource InventoryHeader}" Margin="5,5,0,5"/>
+                            <Label Content="Guardar información " FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource GrayFont}" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Refresh button -->
+                    <Button x:Name="RefreshProducts" ToolTip="Recargar página" Background="{StaticResource InventoryHeader}" Style="{StaticResource RoundedButton}" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,20,0" Click="RefreshProducts_Click">
+                        <fa:ImageAwesome Icon="Refresh" Margin="7" Foreground="White"/>
+                    </Button>
+
+                    <!-- Search button -->
+                    <Button x:Name="FilterBT" ToolTip="Buscar o filtrar" Background="{StaticResource InventoryHeader}" Style="{StaticResource RoundedButton}" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,70,0" Click="FilterBT_Click_Form">
+                        <fa:ImageAwesome Icon="Search" Margin="7" Foreground="White"/>
+                    </Button>
+
+                    <!-- Form and list content -->
+                    <DockPanel Margin="-2,70,-2,40" LastChildFill="True">
+
+                        <!-- Products create/modify form -->
+                        <Grid x:Name="FormGrid" DockPanel.Dock="Top" MaxHeight="240" Height="0" Opacity="0" Background="{StaticResource PanelLightBackground}">
+                            <!-- Shadow border-->
+                            <Border VerticalAlignment="Top" Height="10" Margin="0,-10,0,0" Background="White">
+                                <Border.Effect>
+                                    <DropShadowEffect Opacity="0.23" Direction="270" ShadowDepth="3" BlurRadius="2"/>
+                                </Border.Effect>
+                            </Border>
+
+                            <!-- Input controls here -->
+                            <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                                <!-- Product code -->
+                                <Grid>
+                                    <Label Content="Codigo:"  Opacity=".5" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,15,0,0"/>
+                                    <TextBox x:Name="ProductCodeTX" TextAlignment="Right" PreviewTextInput="ProductCodeTX_PreviewTextInput" KeyDown="MoveFocus" MaxLength="20" Width="250" VerticalAlignment="Top" Margin="24,45,0,0" Style="{StaticResource StyledTextBox}" Height="25" HorizontalAlignment="Left"/>
+                                </Grid>
+                                <!-- Supplier comercial name -->
+                                <Grid>
+                                    <Label Content="Nombre:" Opacity=".5" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,15,0,0"/>
+                                    <TextBox x:Name="ProductNameTX" KeyDown="MoveFocus"  MaxLength="100" Width="250" VerticalAlignment="Top" Style="{StaticResource StyledTextBox}" Margin="24,45,0,0" Height="25" HorizontalAlignment="Left" />
+                                </Grid>
+                                <!-- Supplier identification -->
+                                <Grid>
+                                    <Label Content="Categoria:" Opacity=".5" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,15,0,0"/>
+                                    <ComboBox x:Name="ProductCatCB" SelectedIndex="0" DisplayMemberPath="name" KeyDown="MoveFocus" BorderBrush="{StaticResource InventoryHeader}" Style="{StaticResource ComboBoxStyled}" Height="25" Width="250" Margin="24,45,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                                </Grid>
+                            </StackPanel>
+                            <!---->
+                    <StackPanel Orientation="Horizontal"  Margin="0,60,0,0" VerticalAlignment="Top">
+                        <!-- Supplier mail -->
+                            <Grid>
+                                <Label Content="Precio de costo:" Opacity=".5" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,15,0,0"/>
+                                <currency:CurrencyTextBox x:Name="ProductCostTX" StringFormat="C0" PreviewTextInput="ProductCodeTX_PreviewTextInput" KeyDown="MoveFocus" MaxLength="15" Width="250" VerticalAlignment="Top" Style="{StaticResource StyledTextBox}" Margin="24,45,0,0" Height="25" HorizontalAlignment="Left"/>
+                            </Grid>
+                            <!-- Supplier contact -->
+                            <Grid>
+                                <Label Content="Precio de venta general:" Opacity=".5" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,15,0,0"/>
+                                <currency:CurrencyTextBox x:Name="ProductPriceTX" StringFormat="C0"  PreviewTextInput="ProductCodeTX_PreviewTextInput" KeyDown="MoveFocus" MaxLength="15" Width="250" VerticalAlignment="Top" Style="{StaticResource StyledTextBox}" Margin="24,45,0,0" Height="25" HorizontalAlignment="Left"/>
+                            </Grid>
+                            <Grid>
+                                <!-- User status -->
+                                <Label Content="Tipo de unidad:" Opacity=".5" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,15,0,0"/>
+                                <ComboBox x:Name="ProductTypeCB" SelectedIndex="0" KeyDown="MoveFocus" BorderBrush="{StaticResource InventoryHeader}" Style="{StaticResource ComboBoxStyled}" Height="25" Width="250" Margin="24,45,0,0" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                    <ComboBoxItem Content="UN - Unidad"/>
+                                    <ComboBoxItem Content="PQ - Paquete"/>
+                                    <Separator></Separator>
+                                    <ComboBoxItem Content="GR - Gramos"/>
+                                    <ComboBoxItem Content="LB - Libras"/>
+                                    <ComboBoxItem Content="KG - Kilogramos"/>
+                                </ComboBox>
+                            </Grid>
+                            </StackPanel>
+                            <!---->
+                          <StackPanel Orientation="Horizontal"  Margin="0,120,0,0" VerticalAlignment="Top">
+                        <!-- stock min -->
+                            <Grid>
+                                <Label Content="Stock minimo:" Opacity=".5" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,15,0,0"/>
+                                <TextBox x:Name="MinStockTX" GotKeyboardFocus="MinStockTX_GotKeyboardFocus" ToolTip="En valor '0' las alertas de stock no seran mostradas para este preoducto " Text="0" TextAlignment="Right" PreviewTextInput="ProductCodeTX_PreviewTextInput" KeyDown="MoveFocus" MaxLength="10" Width="250" VerticalAlignment="Top" Style="{StaticResource StyledTextBox}" Margin="24,45,0,0" Height="25" HorizontalAlignment="Left"/>
+                            </Grid>
+                              
+                            <!-- stock max -->
+                            <Grid>
+                                <Label Content="Stock maximo:" Opacity=".5" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,15,0,0"/>
+                                <TextBox x:Name="MaxStockTX" GotKeyboardFocus="MaxStockTX_GotKeyboardFocus" Text="0" TextAlignment="Right" PreviewTextInput="ProductCodeTX_PreviewTextInput" KeyDown="MoveFocus" MaxLength="10" Width="250" VerticalAlignment="Top" Style="{StaticResource StyledTextBox}" Margin="24,45,0,0" Height="25" HorizontalAlignment="Left"/>
+                            </Grid>
+                            <StackPanel Orientation="Horizontal">
+                                <Button x:Name="PricesBT" Uid="2" IsEnabled="False" Height="30" Width="120" FontWeight="Normal" Content="Editar precios" Background="{StaticResource InventoryHeader}" Style="{StaticResource StyledButton}"  Margin="24,40,0,0" Click="Button_Click" />
+                                <Button Uid="2" IsEnabled="False" Height="30" Width="120" FontWeight="Normal" Content="Operaciónes" Background="{StaticResource InventoryHeader}" Style="{StaticResource StyledButton}"  Margin="10,40,0,0" Click="FilterBT_Click" />
+                            </StackPanel>
+                            
+
+                            </StackPanel>
+
+                            <Grid Margin="0,180,0,0">
+                                <Label Content="Impuestos:" Opacity=".5" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,15,0,0"/>
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="100,22,0,0">
+                                    <RadioButton x:Name="TaxNoneRB" IsChecked="True" Foreground="{StaticResource GrayFont}" Content="Ninguno" VerticalContentAlignment="Center"/>
+                                    <RadioButton x:Name="TaxIvaRB"  Content="IVA 19%" Foreground="{StaticResource GrayFont}" Margin="30,0,30,0" VerticalContentAlignment="Center"/>
+                                    <RadioButton x:Name="TaxIva5RB"  Content="IVA 5%" Foreground="{StaticResource GrayFont}" Margin="0,0,30,0" VerticalContentAlignment="Center"/>
+                                    <RadioButton x:Name="TaxIacRB"  Content="Impoconsumo 8%" Foreground="{StaticResource GrayFont}" VerticalContentAlignment="Center"/>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+
+                        <!-- Filter form -->
+                        <Grid x:Name="FilterGrid" DockPanel.Dock="Top" MaxHeight="80" Height="0" Opacity="0" Background="{StaticResource PanelLightBackground}" >
+                            <!-- Shadow border-->
+                            <Border VerticalAlignment="Top" Height="10" Margin="0,-10,0,0" Background="White">
+                                <Border.Effect>
+                                    <DropShadowEffect Opacity="0.23" Direction="270" ShadowDepth="3" BlurRadius="2"/>
+                                </Border.Effect>
+                            </Border>
+
+                            <Border Height="30" Width="40" HorizontalAlignment="Left" Margin="60,0,0,0" CornerRadius="2" Background="{StaticResource InventoryHeader}" >
+                                <fa:ImageAwesome Icon="Search" Margin="8" Foreground="White"/>
+                            </Border>
+                            <!-- Filter textbox -->
+                            <TextBox x:Name="FilterTX"  Tag="Buscar producto por código o nombre" FontWeight="Normal" VerticalAlignment="Center" Text="" Margin="98,0,130,0" Padding="5,0,0,0"  Style="{StaticResource StyledTextBox}" Height="30" KeyDown="FilterTX_KeyDown"/>
+
+                            <!-- Filter Buttons -->
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,0,30,0">
+                                <Button Uid="2" Height="30" FontWeight="Normal" Content="Buscar" Background="{StaticResource InventoryHeader}" Style="{StaticResource StyledButton}" Width="70" Margin="10,0,0,0" Click="FilterBT_Click" />
+                            </StackPanel>
+                        </Grid>
+
+
+                        <!-- Products list -->
+                        <DataGrid FontSize="12" x:Name="ProductsGrid" RowDetailsVisibilityMode="Collapsed"  Background="White" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" Style="{StaticResource DataGridStyled}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="CÓDIGO" MaxWidth="300" MinWidth="150" Binding="{Binding code}" CellStyle="{StaticResource DataGridCellStyledRight}"  HeaderStyle="{StaticResource DataGridHeaderStyledRight}"  />
+                                <DataGridTextColumn Header="NOMBRE" MinWidth="300" Binding="{Binding name}" />
+                                <DataGridTextColumn Header="CATEGORÍA" MinWidth="120" Width="*" Binding="{Binding category_name}" />                                
+                                <DataGridTemplateColumn Header="ACCIÓN" MinWidth="300" >
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,30,0">
+                                                <Button x:Name="See" Click="See_Click"  Style="{StaticResource IconButton}" ToolTip="Ver resumen" Height="25" HorizontalAlignment="Left" Margin="0,0,0,0" >
+                                                    <StackPanel Orientation="Horizontal" >
+                                                        <fa:ImageAwesome Icon="Eye" Foreground="{StaticResource InventoryHeader}" Margin="5"/>
+                                                    </StackPanel>
+                                                </Button>
+                                                <Button x:Name="Edit" Tag="{Binding id}" Style="{StaticResource IconButton}" Height="25" HorizontalAlignment="Left" Margin="15,0,0,0" Click="Edit_Click">
+                                                    <StackPanel Orientation="Horizontal" >
+                                                        <fa:ImageAwesome Icon="Edit" Foreground="{StaticResource InventoryHeader}" Margin="5,5,0,5"/>
+                                                        <Label Content="Editar " FontSize="12" Foreground="{StaticResource InventoryHeader}" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                                                    </StackPanel>
+                                                </Button>
+                                                <Button x:Name="Delete" Tag="{Binding id}" Style="{StaticResource IconButton}" Height="25" HorizontalAlignment="Left" Margin="15,0,0,0" Click="Delete_Click"  >
+                                                    <StackPanel Orientation="Horizontal" >
+                                                        <fa:ImageAwesome Icon="Trash" Foreground="{StaticResource InventoryHeader}" Margin="5,5,0,5"/>
+                                                        <Label Content="Eliminar " FontSize="12" Foreground="{StaticResource InventoryHeader}" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                                                    </StackPanel>
+                                                </Button>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                            <DataGrid.RowDetailsTemplate>
+                                <DataTemplate>
+                                    <!-- Product detail information -->
+                                    <Grid Background="{StaticResource PanelLightBackground}">
+                                        <StackPanel Orientation="Vertical" Margin="65,10,0,20" Width="250" HorizontalAlignment="Left">
+                                            <Grid>
+                                                <Label Content="• Costo de producto:" FontWeight="SemiBold"/>
+                                                <Label Content="{Binding pCost}" ContentStringFormat="C0" HorizontalAlignment="Right" Margin="150,0,0,0"/>
+                                            </Grid>
+                                            <Grid>
+                                                <Label Content="• Precio de venta general:" FontWeight="SemiBold"/>
+                                                <Label Content="{Binding pSell}" ContentStringFormat="C0"  HorizontalAlignment="Right" Margin="150,0,0,0"/>
+                                            </Grid>
+                                            <Grid>
+                                                <Label Content="• Ganancia:" FontWeight="SemiBold"/>
+                                                <Label Content="{Binding pGet}" ContentStringFormat="C0" HorizontalAlignment="Right" Margin="150,0,0,0"/>
+                                            </Grid>
+                                            <Grid>
+                                                <Label Content="• Utilidad:" FontWeight="SemiBold"/>
+                                                <Label Content="{Binding utility}"  HorizontalAlignment="Right" Margin="150,0,0,0"/>
+                                            </Grid>
+                                        </StackPanel>
+                                    </Grid>
+                                </DataTemplate>
+                            </DataGrid.RowDetailsTemplate>
+                        </DataGrid>
+                    </DockPanel>
+
+
+                    <Grid Height="40" Margin="-2,0,-2,-2" VerticalAlignment="Bottom" Background="{StaticResource PanelLightBackground}">
+                        <!-- Pagination and count info -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <Label Content="Mostrando registros:" FontSize="12" VerticalAlignment="Center" Margin="20,0,0,0" Foreground="{StaticResource GrayFont}" FontWeight="SemiBold"/>
+                            <Label x:Name="FPage" Content="0" FontSize="12" VerticalAlignment="Center" Foreground="{StaticResource InventoryHeader}" FontWeight="Bold"/>
+                            <Label Content="-" FontSize="12" VerticalAlignment="Center" Foreground="{StaticResource GrayFont}" FontWeight="SemiBold"/>
+                            <Label x:Name="LPage" Content="0" FontSize="12" VerticalAlignment="Center" Foreground="{StaticResource InventoryHeader}" FontWeight="Bold"/>
+                            <Label Content="de" FontSize="12" VerticalAlignment="Center" Foreground="{StaticResource GrayFont}" FontWeight="SemiBold"/>
+                            <Label x:Name="TotalProducts" Content="0" FontSize="12" VerticalAlignment="Center" Foreground="{StaticResource InventoryHeader}" FontWeight="Bold"/>
+                        </StackPanel>
+                        <!-- Product pagination-->
+                        <StackPanel x:Name="PaginationStack" SnapsToDevicePixels="True" Margin="0,7,30,7" Orientation="Horizontal" HorizontalAlignment="Right"/>
+                    </Grid>
+
+                    <!-- Loading category grid TOP -->
+                    <Grid x:Name="LoadingProductGrid" Margin="-2,-2,-2,40" Background="White" Visibility="Collapsed">
+                        <fa:ImageAwesome x:Name="ProductSpinner" Icon="Spinner" Spin="True" Foreground="{StaticResource InventoryHeader}" SpinDuration="2" Width="80"/>
+                        <Label Content="Cargando datos" FontWeight="Normal" Margin="0,120,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource InventoryHeader}"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="CategoryTab" Background="{StaticResource InventoryHeader}" Height="50" Style="{StaticResource StyledTabItem}">
+                <!-- Header -->
+                <TabItem.Header>
+                    <TextBlock Text="Categorías de producto" FontWeight="Medium"/>
+                </TabItem.Header>
+                <Grid>                    
+
+                    <!-- Category Add button -->
+                    <Button x:Name="NewCategoryBT" Click="NewCategoryBT_Click" Style="{StaticResource IconButton}" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,20,0,0" >
+                        <StackPanel Orientation="Horizontal" >
+                            <fa:ImageAwesome Icon="Plus" Foreground="{StaticResource InventoryHeader}" Margin="5,5,0,5"/>
+                            <Label Content="Nueva categoria " FontSize="14" FontWeight="Medium" Foreground="{StaticResource GrayFont}" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Save button -->
+                    <Button x:Name="SaveCategoryBT" Click="SaveCategoryBT_Click" IsEnabled="False"  Style="{StaticResource IconButton}" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="210,20,0,0" >
+                        <StackPanel Orientation="Horizontal" >
+                            <fa:ImageAwesome Icon="Save" Foreground="{StaticResource InventoryHeader}" Margin="5,5,0,5"/>
+                            <Label Content="Guardar información " FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource GrayFont}" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Refresh button -->
+                    <Button x:Name="RefreshCatBT" Click="RefreshCatBT_Click" ToolTip="Recargar página" Background="{StaticResource InventoryHeader}" Style="{StaticResource RoundedButton}" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,20,0">
+                        <fa:ImageAwesome Icon="Refresh" Margin="7" Foreground="White"/>
+                    </Button>
+
+                    <!-- Form and list content -->
+                    <DockPanel Margin="-2,70,-2,0" LastChildFill="True">
+                        <!-- Rol create/modify form -->
+                        <Grid x:Name="CategoryFormGrid" DockPanel.Dock="Top" MaxHeight="100" Height="0" Opacity="0" Margin="0,0,0,10" Background="{StaticResource PanelLightBackground}">
+                            <!-- Shadow border-->
+                            <Border VerticalAlignment="Top" Height="10" Margin="0,-10,0,0" Background="White">
+                                <Border.Effect>
+                                    <DropShadowEffect Opacity="0.23" Direction="270" ShadowDepth="3" BlurRadius="2"/>
+                                </Border.Effect>
+                            </Border>
+
+                            <!-- Input controls here -->
+                            <StackPanel Orientation="Horizontal" >
+                                <!-- Rol name -->
+                                <Grid>
+                                    <Label Content="Nombre:" FontWeight="Normal" Opacity=".5" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,15,0,0"/>
+                                    <TextBox x:Name="CategoryNameTX"  MaxLength="30"  FontWeight="Normal" Width="250" VerticalAlignment="Top" Style="{StaticResource StyledTextBox}" Margin="24,45,0,0" Height="25" HorizontalAlignment="Left"/>
+                                </Grid>
+                                <!-- Rol description -->
+                                <Grid>
+                                    <Label Content="Codigo:" Opacity=".5"   FontWeight="Normal" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,15,0,0"/>
+                                    <TextBox x:Name="CategoryCodeTX" PreviewTextInput="ProductCodeTX_PreviewTextInput"  FontWeight="Normal" MaxLength="100" Width="250" VerticalAlignment="Top" Style="{StaticResource StyledTextBox}" Margin="24,45,0,0" Height="25" HorizontalAlignment="Left"/>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                        
+                        <!-- Rol list -->
+                        <DataGrid Background="White" x:Name="CategoryGrid" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" Style="{StaticResource DataGridStyled}">
+                            <DataGrid.Columns>                                
+                                <DataGridTextColumn Header="CÓDIGO" MaxWidth="300" MinWidth="100" Binding="{Binding code}" CellStyle="{StaticResource DataGridCellStyledRight}" HeaderStyle="{StaticResource DataGridHeaderStyledRight}"/>
+                                <DataGridTextColumn Header="NOMBRE" MaxWidth="450" MinWidth="100" Binding="{Binding name}" />
+                                <DataGridTextColumn Header="PRODUCTOS" MinWidth="110"  Binding="{Binding products}" CellStyle="{StaticResource DataGridCellStyledRight}"  HeaderStyle="{StaticResource DataGridHeaderStyledRight}" />
+                                <DataGridTextColumn Width="*"/>
+                                <DataGridTemplateColumn Header="ACCIÓN" MinWidth="300">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">                                                
+                                                <Button x:Name="EditCategory" Click="EditCategory_Click" Tag="{Binding id}" Style="{StaticResource IconButton}" Height="25" HorizontalAlignment="Left">
+                                                    <StackPanel Orientation="Horizontal" >
+                                                        <fa:ImageAwesome Icon="Edit" Foreground="{StaticResource InventoryHeader}" Margin="5,5,0,5"/>
+                                                        <Label Content="Editar " FontSize="12" Foreground="{StaticResource InventoryHeader}" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                                                    </StackPanel>
+                                                </Button>
+                                                <Button x:Name="DeleteCategory" Click="DeleteCategory_Click" Tag="{Binding id}" Style="{StaticResource IconButton}" Height="25" HorizontalAlignment="Left" Margin="15,0,0,0" >
+                                                    <StackPanel Orientation="Horizontal" >
+                                                        <fa:ImageAwesome Icon="Trash" Foreground="{StaticResource InventoryHeader}" Margin="5,5,0,5"/>
+                                                        <Label Content="Eliminar " FontSize="12" Foreground="{StaticResource InventoryHeader}" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                                                    </StackPanel>
+                                                </Button>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+
+                    <!-- Loading category grid TOP -->
+                    <Grid x:Name="LoadingGrid" Background="White" Visibility="Collapsed">
+                        <fa:ImageAwesome x:Name="Spinner" Icon="Spinner" Spin="True" Foreground="{StaticResource InventoryHeader}" SpinDuration="2" Width="80"/>
+                        <Label Content="Cargando datos" FontWeight="Normal" Margin="0,120,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource InventoryHeader}"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem x:Name="PriceCatTab" Background="{StaticResource InventoryHeader}" Height="50" Style="{StaticResource StyledTabItem}">
+                <!-- Header -->
+                <TabItem.Header>
+                    <TextBlock Text="Categorias de precio" FontWeight="Medium"/>
+                </TabItem.Header>
+
+                <Grid>
+
+                    <!-- Category Add button -->
+                    <Button x:Name="NewPriceBT" Click="NewPriceBT_Click" Style="{StaticResource IconButton}" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,20,0,0" >
+                        <StackPanel Orientation="Horizontal" >
+                            <fa:ImageAwesome Icon="Plus" Foreground="{StaticResource InventoryHeader}" Margin="5,5,0,5"/>
+                            <Label Content="Nuevo precio " FontSize="14" FontWeight="Medium" Foreground="{StaticResource GrayFont}" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Save button -->
+                    <Button x:Name="SavePriceBT" Click="SavePriceBT_Click"    IsEnabled="False"  Style="{StaticResource IconButton}" Height="30" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="210,20,0,0" >
+                        <StackPanel Orientation="Horizontal" >
+                            <fa:ImageAwesome Icon="Save" Foreground="{StaticResource InventoryHeader}" Margin="5,5,0,5"/>
+                            <Label Content="Guardar información " FontSize="14" FontWeight="SemiBold" Foreground="{StaticResource GrayFont}" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                        </StackPanel>
+                    </Button>
+
+                    <!-- Refresh button -->
+                    <Button x:Name="RefreshPriceBT" Click="RefreshPriceBT_Click"  ToolTip="Recargar página" Background="{StaticResource InventoryHeader}" Style="{StaticResource RoundedButton}" Height="30" Width="30" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,20,20,0">
+                        <fa:ImageAwesome Icon="Refresh" Margin="7" Foreground="White"/>
+                    </Button>
+
+                    <!-- Form and list content -->
+                    <DockPanel Margin="-2,70,-2,0" LastChildFill="True">
+                        <!-- Rol create/modify form -->
+                        <Grid x:Name="PriceFormGrid" DockPanel.Dock="Top" MaxHeight="100" Height="0" Opacity="0" Margin="0,0,0,10" Background="{StaticResource PanelLightBackground}">
+                            <!-- Shadow border-->
+                            <Border VerticalAlignment="Top" Height="10" Margin="0,-10,0,0" Background="White">
+                                <Border.Effect>
+                                    <DropShadowEffect Opacity="0.23" Direction="270" ShadowDepth="3" BlurRadius="2"/>
+                                </Border.Effect>
+                            </Border>
+
+                            <!-- Input controls here -->
+                            <StackPanel Orientation="Horizontal" >
+                                <!-- price name -->
+                                <Grid>
+                                    <Label Content="Nombre:" FontWeight="Normal" Opacity=".5" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,15,0,0"/>
+                                    <TextBox x:Name="PriceNameTX"  MaxLength="30"  FontWeight="Normal" Width="250" VerticalAlignment="Top" Style="{StaticResource StyledTextBox}" Margin="24,45,0,0" Height="25" HorizontalAlignment="Left"/>
+                                </Grid>
+                                <!-- price value -->
+                                <Grid>
+                                    <Label Content="Tipo:" Opacity=".5"   FontWeight="Normal" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,15,0,0"/>                                    
+                                    <ComboBox x:Name="PriceTypeCB" SelectedIndex="0" KeyDown="MoveFocus" BorderBrush="{StaticResource InventoryHeader}" Style="{StaticResource ComboBoxStyled}" Height="25" Width="250" Margin="24,45,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" SelectionChanged="PriceTypeCB_SelectionChanged">
+                                        <ComboBoxItem Content="Precio adjunto"/>
+                                        <ComboBoxItem Content="Porcentaje general"/>
+                                    </ComboBox>
+                                </Grid>
+                                <!-- price value -->
+                                <Grid>
+                                    <Label Content="Valor:" Opacity=".5"   FontWeight="Normal" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,15,0,0"/>
+                                    <TextBox x:Name="PriceValueTX" Text="0" PreviewTextInput="ProductCodeTX_PreviewTextInput" HorizontalContentAlignment="Right" IsEnabled="False" FontWeight="Normal" MaxLength="100" Width="200" VerticalAlignment="Top" Style="{StaticResource StyledTextBox}" Margin="24,45,0,0" Height="25" HorizontalAlignment="Left"/>
+                                    <Label Content="%" Opacity=".5"   FontWeight="Normal" FontSize="14" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="220,45,0,0"/>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- Rol list -->
+                        <DataGrid Background="White" x:Name="PricesGrid" IsReadOnly="True" CanUserAddRows="False" CanUserDeleteRows="False" SelectionMode="Single" Style="{StaticResource DataGridStyled}">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="NOMBRE" MaxWidth="450" MinWidth="200" Binding="{Binding name}"/>
+                                <DataGridTextColumn Header="TIPO" MaxWidth="400" MinWidth="150" Binding="{Binding type_name}" />
+                                <DataGridTextColumn Header="VALOR" MaxWidth="300" MinWidth="100" Binding="{Binding valuestring}" CellStyle="{StaticResource DataGridCellStyledRight}" HeaderStyle="{StaticResource DataGridHeaderStyledRight}"/>                                
+                                <DataGridTextColumn Width="*"/>
+                                <DataGridTemplateColumn Header="ACCIÓN" MinWidth="300">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                <Button x:Name="EditPrice" Click="EditPrice_Click"  Tag="{Binding id}" Style="{StaticResource IconButton}" Height="25" HorizontalAlignment="Left">
+                                                    <StackPanel Orientation="Horizontal" >
+                                                        <fa:ImageAwesome Icon="Edit" Foreground="{StaticResource InventoryHeader}" Margin="5,5,0,5"/>
+                                                        <Label Content="Editar " FontSize="12" Foreground="{StaticResource InventoryHeader}" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                                                    </StackPanel>
+                                                </Button>
+                                                <Button x:Name="DeletePrice" Click="DeletePrice_Click"  Tag="{Binding id}" Style="{StaticResource IconButton}" Height="25" HorizontalAlignment="Left" Margin="15,0,0,0" >
+                                                    <StackPanel Orientation="Horizontal" >
+                                                        <fa:ImageAwesome Icon="Trash" Foreground="{StaticResource InventoryHeader}" Margin="5,5,0,5"/>
+                                                        <Label Content="Eliminar " FontSize="12" Foreground="{StaticResource InventoryHeader}" VerticalContentAlignment="Center" Margin="5,0,0,0"/>
+                                                    </StackPanel>
+                                                </Button>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </DockPanel>
+
+                    <!-- Loading category grid TOP -->
+                    <Grid x:Name="LoadingPricesGrid" Background="White" Visibility="Collapsed">
+                        <fa:ImageAwesome x:Name="PriceSpinner" Icon="Spinner" Spin="True" Foreground="{StaticResource InventoryHeader}" SpinDuration="2" Width="80"/>
+                        <Label Content="Cargando datos" FontWeight="Normal" Margin="0,120,0,0" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="{StaticResource InventoryHeader}"/>
+                    </Grid>
+                </Grid>
+
+
+            </TabItem>
+        </TabControl>
+        <Popup  x:Name="ProductPopUp" PlacementTarget="{x:Reference Name=ProductTab}" Opened="ProductPopUp_Opened" Width="600">
+            
+                <Border Margin="15"  CornerRadius="10" Background="White" BorderBrush="Gainsboro" BorderThickness="1">
+                    <Border.Effect>
+                        <DropShadowEffect ShadowDepth="0" BlurRadius="10" Opacity="0.5"/>
+                    </Border.Effect>
+                <Grid x:Name="ContentCanvas">
+                    
+                        <!-- PopupHeader -->
+                        <Label FontSize="14" Content="Precios de producto" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="10" Foreground="{StaticResource InventoryHeader}" FontWeight="SemiBold"/>
+                        <Label x:Name="PopUpProductName" FontSize="12" Content="Nombre de producto" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,30,0,0" />
+                        <Label x:Name="PopUpProductValue" FontSize="12" Content="Valor de producto" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,45,0,0" Foreground="Gray" />
+                        <Button Click="ExitClick" ToolTip="Recargar pagína" Background="{StaticResource InventoryHeader}" Style="{StaticResource RoundedButton}" Height="20" Width="20" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="15">
+                                <fa:ImageAwesome Icon="Close" Margin="5" Foreground="White"/>
+                            </Button>
+                    <Label x:Name="ErrorMessage" Visibility="Collapsed" FontSize="12" Content="Message" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Gray" FontWeight="Light"/>
+                    <StackPanel x:Name="PriceStack" Orientation="Vertical" Margin="0,90,0,70">
+                        <!-- Price lsit -->                        
+
+                           
+                        </StackPanel>
+                    <!-- Save option -->
+                    <Button IsEnabled="False" Uid="2" Height="30" x:Name="PopUpSaveBT" VerticalAlignment="Bottom" Click="PopUpSaveBT_Click" FontWeight="Normal" Content="Guardar" Background="{StaticResource InventoryHeader}" Style="{StaticResource StyledButton}" Width="70" Margin="0,20,0,20" />
+                </Grid>
+                </Border>            
+        </Popup>
+    </Grid>
+</Page>

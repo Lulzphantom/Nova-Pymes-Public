@@ -1,0 +1,89 @@
+﻿<Window x:Class="Nova.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Nova"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        mc:Ignorable="d"
+        Title="NovaPymes"
+        Height="450" Width="360"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize" Loaded="Window_Loaded">
+    <!-- 360 / 720 Width-->
+    <StackPanel Orientation="Horizontal">
+        <Grid x:Name="LoginGrid" Width="360" HorizontalAlignment="Left">
+          
+            <!-- Logo Content -->
+            <StackPanel Orientation="Vertical" Margin="0,50,0,0" VerticalAlignment="Top">
+                <Image x:Name="ImageLogo" HorizontalAlignment="Center" Width="120" Source="Assets/Logos/NovaLogo.png" RenderOptions.BitmapScalingMode="HighQuality"/>
+                <Label x:Name="WorkPlaceLB" Content="{Binding WorkPlaceContent, FallbackValue='Verificar configuración'}" HorizontalAlignment="Center" Opacity=".5" FontSize="16"/>
+            </StackPanel>
+
+
+            <!-- Config button -->
+
+            <Button IsEnabled="False" x:Name="ConfigButton" Style="{StaticResource RoundedButton}" Height="40" Width="40" Background="{StaticResource BorderBackground}" Margin="10" VerticalAlignment="Top" HorizontalAlignment="Right" ToolTip="Configuración" Click="ConfigButton_Click" TabIndex="4">
+                <fa:ImageAwesome Icon="Gear" Foreground="{StaticResource LoginNotificationColor}" Margin="8"/>
+            </Button>
+
+            <!-- Loading Status -->
+
+            <Grid x:Name="LoadingGrid" Visibility="{Binding LoadingSpinner, FallbackValue=Visible}" VerticalAlignment="Center" HorizontalAlignment="Center" Height="100" Margin="0,135,0,0">
+                <fa:ImageAwesome x:Name="LoadingSpinner" Visibility="Visible" Foreground="{StaticResource BorderBackground}" Icon="Spinner" Spin="{Binding Spin}" SpinDuration="2"/>
+            </Grid>
+
+
+            <!-- Login Input -->
+            <StackPanel x:Name="LoginControls" Visibility="{Binding StackInput, FallbackValue=Collapsed}" Margin="0,200,0,35">
+
+                <!-- Username Input -->
+                <TextBox x:Name="UsernameTX" KeyDown="MoveFocus" GotFocus="UsernameTX_GotFocus" GotKeyboardFocus="UsernameTX_GotFocus" Height="30" Width="220" Margin="0,20,0,0" Style="{StaticResource LoginUserTB}" TabIndex="1"/>
+
+                <!-- Password Input -->
+                <PasswordBox x:Name="PasswordTX" KeyDown="MoveFocus" GotFocus="PasswordTX_GotFocus" GotKeyboardFocus="PasswordTX_GotFocus"  Height="30" Width="220" Margin="0,20,0,20" Style="{StaticResource LoginPasswordPB}" TabIndex="2"/>
+
+                <!-- Login Button -->
+                <Button x:Name="LoginBT" Content="Iniciar sesión" Height="30" Width="220" Foreground="White" Style="{StaticResource LoginButtonStyle}" Click="LoginBT_Click" TabIndex="3"/>
+
+            </StackPanel>
+
+            <!-- Status Border -->
+            <Grid  VerticalAlignment="Bottom" Height="32" Background="{Binding StatusColor, FallbackValue={StaticResource NormalBrush}}">
+
+                <!-- Shadow Effect -->
+                <Grid.Effect>
+                    <DropShadowEffect Opacity="0.23" Direction="90" ShadowDepth="3" BlurRadius="2"/>
+                </Grid.Effect>
+
+                <!-- Status Label -->
+                <Label Height="32" Foreground="{StaticResource LoginNotificationColor}" Content="{Binding StatusContent, FallbackValue='Cargando datos ...'}"  VerticalAlignment="Bottom" HorizontalAlignment="Center" VerticalContentAlignment="Center"/>
+
+            </Grid>
+        </Grid>
+
+        <!-- Configuration menu container -->
+        <Grid x:Name="ConfigGrid" Visibility="Collapsed">
+           
+            <!--Shadow grid-->
+            <Grid  VerticalAlignment="Top" Height="60" Background="White">
+                <Grid.Effect>
+                    <DropShadowEffect Opacity="0.23" Direction="270" ShadowDepth="3" BlurRadius="2"/>
+                </Grid.Effect>
+
+                <!--Label title -->
+                <Label Content="Configuración" Opacity=".5" FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" FontWeight="SemiBold"/>
+            </Grid>            
+            
+            <!-- Config button -->
+            <Button x:Name="ConfigReturnButton" Style="{StaticResource RoundedButton}" Height="40" Width="40" Background="{StaticResource BorderBackground}" Margin="10" VerticalAlignment="Top" HorizontalAlignment="Left" ToolTip="Regresar" Click="ConfigReturnButton_Click" >
+                <fa:ImageAwesome Icon="ArrowLeft" Foreground="{StaticResource LoginNotificationColor}" Margin="8"/>
+            </Button>            
+
+            <!-- Configuration page frame -->
+            <Frame Source="/Nova;component/Pages/Login/LoginConfig.xaml" Width="355" Margin="0,60,0,0"/>
+        </Grid>
+    </StackPanel>
+   
+    
+</Window>
